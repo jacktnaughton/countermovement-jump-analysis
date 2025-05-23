@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from src.config import config
+import pdb
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -74,6 +75,6 @@ class VAE(nn.Module):
 
     def forward(self, x):
         mean, logvar = self.encode(x)
-        z = self.reparameterization(mean, logvar)
+        z = self.reparameterization(mean, torch.exp(0.5 * logvar))
         x_hat = self.decode(z)
         return x_hat, mean, logvar

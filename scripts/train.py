@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from src.model import Autoencoder, VAE
 from src.config import config
 from src.data_loader import load_data
-
+import pdb
 # ===========================
 # Device setup and data load
 # ===========================
@@ -67,9 +67,10 @@ vae_path = f"{base_path}_vae.pth"
 vae = VAE(input_dim=100, latent_dim=config["latent_dim"]).to(device)
 vae_optimizer = optim.Adam(vae.parameters(), lr=config["learning_rate"])
 
-def vae_loss(x, x_hat, mean, logvar, beta=1.0):
+def vae_loss(x, x_hat, mean, logvar, beta=0.01):
     recon_loss = nn.functional.mse_loss(x_hat, x, reduction='mean')
     kl_div = -0.5 * torch.mean(1 + logvar - mean.pow(2) - logvar.exp())
+    # print(f"recon loss: {recon_loss}, kl loss: {kl_div}")
     return recon_loss + beta * kl_div
 
 for epoch in range(config["epochs"]):
@@ -87,6 +88,7 @@ for epoch in range(config["epochs"]):
         test_loss = vae_loss(test_data, x_hat, mean, logvar)
 
     if epoch % 10 == 0:
+        print(logvar.mean())
         print(f"[VAE] Epoch [{epoch+1}/{config['epochs']}], Train Loss: {loss.item():.4f}, Test Loss: {test_loss.item():.4f}")
 
 torch.save({
