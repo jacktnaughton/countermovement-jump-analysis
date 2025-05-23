@@ -1,3 +1,25 @@
+# Jump Consistency and Optimization with Deep Learning
+
+- This project uses deep learning to analyze the evolution and optimization of countermovement jump performance in athletes. By modeling jump force curves with a variational autoencoder (VAE), we extract compact latent space representations that capture essential biomechanical patterns.
+
+# Project Overview
+
+- We analyze athlete performance by tracking the consistency and progression of jump technique across multiple years of training. For each athlete, we compute the Euclidean distance between each jump’s latent vector and their annual average vector to quantify consistency over time.
+
+# Key Methods and Contributions
+
+- Latent Space Modeling: Jump force-time curves are encoded into a 4D latent space using a VAE, trained to reconstruct normalized curves.
+
+- Consistency Metrics: For each athlete, we compute per-year latent centroids and measure how each jump deviates from the centroid. This quantifies temporal consistency in performance.
+
+- Jump Improvement Prescription: A function (prescribe_jump_improvement) modifies an athlete’s latent vector minimally to simulate a jump with at least +1 inch in height, then resynthesizes the improved force curve.
+
+- Inter-Sport Comparisons: By comparing latent space distributions across sports like Beach Volleyball and Acrobatics, we investigate domain-specific movement patterns and potential predictors of elite performance.
+
+- High vs Low Performers: We contrast latent space patterns between top- and bottom-performing athletes within each sport to identify differentiating features.
+
+This research enables data-driven feedback on jump technique evolution, performance optimization, and personalized training prescriptions for athletic development.
+
 # scripts/data_cleaning.py
 - How to run:
      - scripts/clean_data.py
@@ -86,57 +108,35 @@
         - delta: minimum jump height increase (i.e. increase the jump by 2 inches if delta = 2.0, default of 1.0)
         
 
-# Jump Consistency and Optimization with Deep Learning
-
-- This project uses deep learning to analyze the evolution and optimization of countermovement jump performance in athletes. By modeling jump force curves with a variational autoencoder (VAE), we extract compact latent space representations that capture essential biomechanical patterns.
-
-# Project Overview
-
-- We analyze athlete performance by tracking the consistency and progression of jump technique across multiple years of training. For each athlete, we compute the Euclidean distance between each jump’s latent vector and their annual average vector to quantify consistency over time.
-
-# Key Methods and Contributions
-
-- Latent Space Modeling: Jump force-time curves are encoded into a 4D latent space using a VAE, trained to reconstruct normalized curves.
-
-- Consistency Metrics: For each athlete, we compute per-year latent centroids and measure how each jump deviates from the centroid. This quantifies temporal consistency in performance.
-
-- Jump Improvement Prescription: A function (prescribe_jump_improvement) modifies an athlete’s latent vector minimally to simulate a jump with at least +1 inch in height, then resynthesizes the improved force curve.
-
-- Inter-Sport Comparisons: By comparing latent space distributions across sports like Beach Volleyball and Acrobatics, we investigate domain-specific movement patterns and potential predictors of elite performance.
-
-- High vs Low Performers: We contrast latent space patterns between top- and bottom-performing athletes within each sport to identify differentiating features.
-
-This research enables data-driven feedback on jump technique evolution, performance optimization, and personalized training prescriptions for athletic development.
-
 
 # Project Structure
-
+```
 project_root/
 │── data/                     # processed datasets
-│   ├── binned_females.pkl    # all male athletes, cleaned dataset
+│   ├── binned_males.pkl      # all male athletes, cleaned dataset
 │   ├── binned_females.pkl    # all female athletes, cleaned dataset
 │
 │── functions/                # useful functions
 │   ├── prescribe_jump.py     # used to prescribe jump improvements
 │
-│── saved_models/             # Trained models
+│── saved_models/             # trained models
 │   ├── autoencoder_stochastic_{date}.pth
 │
-│── scripts/                  # Core scripts
-│   ├── data_cleaning.py      # Preprocess raw jump data
-│   ├── outlier_removal.py    # Detect and remove outliers using autoencoder
+│── scripts/                  # core scripts
+│   ├── data_cleaning.py      # preprocess raw jump data
+│   ├── outlier_removal.py    # detect and remove outliers using autoencoder
 │   ├── train.py              # train model
 │   ├── week_10.ipynb         # analysis containing reconstructions by top and bottom 10%
 │
-│── src/                      # Jupyter notebooks for interactive analysis
-│   ├── \__init__.py
-│   ├── config.py             # Contains configurations for model parameters and file paths
+│── src/                      # source code for models and data loading
+│   ├── __init__.py
+│   ├── config.py             # contains configurations for model parameters and file paths
 │   ├── data_loader.py        # used in model training to load the data
-│   ├── model.py              # contains the structure for Autoencoder and Variational Autoencoder models
+│   ├── model.py              # contains the structure for autoencoder and VAE models
 │
-│── README.md                 # This file
-│── Makefile (future)         # Shortcut commands (planned )
-
+│── README.md                 # this file
+│── Makefile (future)         # shortcut commands (planned)
+```
 
 
 
